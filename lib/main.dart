@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:path_provider/path_provider.dart'; 
-import 'dart:io'; 
-import 'pages/home_page.dart';
+import 'pages/sign_in_page.dart';
+import 'models/article.dart';
+import 'package:path_provider/path_provider.dart';  // Add this import
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +20,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'News App',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: HomePage(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        useMaterial3: true,
+      ),
+      home: const SignInPage(),
     );
   }
 }
