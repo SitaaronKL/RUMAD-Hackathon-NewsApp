@@ -13,10 +13,29 @@ class NewsCategoryModel {
         iconPath: 'assets/icons/business.svg',
       ),
       NewsCategoryModel(
-        name: 'Tech',
-        iconPath: 'assets/icons/tech.svg',
+        name: 'Entertainment',
+        iconPath: 'assets/icons/entertainment.svg',
       ),
-      // Add other categories...
+      NewsCategoryModel(
+        name: 'General',
+        iconPath: 'assets/icons/general.svg',
+      ),
+      NewsCategoryModel(
+        name: 'Health',
+        iconPath: 'assets/icons/health.svg',
+      ),
+      NewsCategoryModel(
+        name: 'Science',
+        iconPath: 'assets/icons/science.svg',
+      ),
+      NewsCategoryModel(
+        name: 'Sports',
+        iconPath: 'assets/icons/sports.svg',
+      ),
+      NewsCategoryModel(
+        name: 'Technology',
+        iconPath: 'assets/icons/technology.svg',
+      ),
     ];
   }
 } 

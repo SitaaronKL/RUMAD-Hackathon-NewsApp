@@ -7,6 +7,7 @@ import '../models/news_category_model.dart';
 import '../models/featured_news_model.dart';
 import 'business_articles_page.dart';
 import 'tech_articles_page.dart';
+import 'category_articles_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -118,18 +119,41 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _categoriesSection() {
-    return SizedBox(
-      height: 100,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: categories.length,
-        itemBuilder: (context, index) {
-          return CategoryItem(
-            category: categories[index],
-            articles: _articles,
-          );
-        },
-      ),
+    final categories = [
+      NewsCategoryModel(name: 'Business', iconPath: 'assets/icons/business.svg'),
+      NewsCategoryModel(name: 'Entertainment', iconPath: 'assets/icons/entertainment.svg'),
+      NewsCategoryModel(name: 'General', iconPath: 'assets/icons/general.svg'),
+      NewsCategoryModel(name: 'Health', iconPath: 'assets/icons/health.svg'),
+      NewsCategoryModel(name: 'Science', iconPath: 'assets/icons/science.svg'),
+      NewsCategoryModel(name: 'Sports', iconPath: 'assets/icons/sports.svg'),
+      NewsCategoryModel(name: 'Technology', iconPath: 'assets/icons/technology.svg'),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          child: Text(
+            'Categories',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+        GridView.count(
+          shrinkWrap: true, // Important to work inside ListView
+          physics: const NeverScrollableScrollPhysics(), // Disable grid scrolling
+          crossAxisCount: 3,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          mainAxisSpacing: 16,
+          crossAxisSpacing: 16,
+          childAspectRatio: 1.0,
+          children: categories.map((category) => CategoryItem(category: category)).toList(),
+        ),
+      ],
     );
   }
 
@@ -194,62 +218,79 @@ class FeaturedNewsItem extends StatelessWidget {
 
 class CategoryItem extends StatelessWidget {
   final NewsCategoryModel category;
-  final List<Article> articles;
 
-  const CategoryItem({super.key, required this.category, required this.articles});
+  const CategoryItem({super.key, required this.category});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        print('Category tapped: ${category.name.toLowerCase()}');
-        switch (category.name.toLowerCase()) {
-          case 'business':
-            print('Navigating to Business page');
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => BusinessArticlesPage(articles: articles),
-              ),
-            );
-            break;
-          case 'technology':
-            print('Navigating to Tech page');
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TechArticlesPage(articles: articles),
-              ),
-            );
-            break;
-          default:
-            print('No matching category found');
-        }
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CategoryArticlesPage(
+              category: category.name.toLowerCase(),
+            ),
+          ),
+        );
       },
       child: Container(
-        width: 100,
-        margin: const EdgeInsets.symmetric(horizontal: 8),
         decoration: BoxDecoration(
           color: Colors.grey[200],
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.2),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SvgPicture.asset(
-              category.iconPath,
-              height: 40,
-              width: 40,
-              placeholderBuilder: (BuildContext context) => Container(
-                padding: const EdgeInsets.all(8.0),
-                child: const CircularProgressIndicator(),
-              ),
+            Icon(
+              _getIconData(category.name),
+              size: 32,
+              color: Colors.blue,
             ),
             const SizedBox(height: 8),
-            Text(category.name),
+            Text(
+              category.name,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
           ],
         ),
       ),
     );
+  }
+
+  IconData _getIconData(String category) {
+    switch (category.toLowerCase()) {
+      case 'business':
+        return Icons.business;
+      case 'entertainment':
+        return Icons.movie;
+      case 'general':
+        return Icons.public;
+      case 'health':
+        return Icons.health_and_safety;
+      case 'science':
+        return Icons.science;
+      case 'sports':
+        return Icons.sports;
+      case 'technology':
+        return Icons.computer;
+      default:
+        return Icons.category;
+    }
   }
 }
 
